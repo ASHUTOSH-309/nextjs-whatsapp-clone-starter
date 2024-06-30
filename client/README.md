@@ -37,3 +37,9 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # nextjs-whatsapp-clone-starter
+
+
+
+
+.next is generated when initially the project is run using command
+yarn dev somewhat like npm run dev
