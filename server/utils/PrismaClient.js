@@ -3,9 +3,6 @@
 import { PrismaClient } from "@prisma/client";
 
 
-
-
-
 let prismaInstance = null;
 
 function getPrismaInstance() {
