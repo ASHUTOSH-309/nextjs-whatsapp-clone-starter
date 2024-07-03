@@ -9,6 +9,7 @@ import axios from "axios";
 import { reducerCases } from "@/context/constants";
 import EmojiPicker from "emoji-picker-react";
 import PhotoPicker from "../common/PhotoPicker";
+import CaptureAudio from "../common/CaptureAudio";
 
 function MessageBar() {
 
@@ -18,6 +19,7 @@ function MessageBar() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const emojiPickerRef = useRef(null)
   const [grabPhoto, setGrabPhoto] = useState(false)
+  const [showAudioRecorder, setShowAudioRecorder] = useState(false)
 
   const photoPickerChange = async (e) => {
 
@@ -44,19 +46,19 @@ function MessageBar() {
 
       if (response.status === 201) {
 
-          socket.current.emit("send-msg", {
-            to: currentChatUser?.id,
-            from: userInfo?.id,
-            message: response?.data?.message,
-          });
+        socket.current.emit("send-msg", {
+          to: currentChatUser?.id,
+          from: userInfo?.id,
+          message: response?.data?.message,
+        });
 
-          dispatch({
-            type: reducerCases.ADD_MESSAGE,
-            newMessage: {
-              ...response.data.message
-            },
-            fromSelf: true,
-          })
+        dispatch({
+          type: reducerCases.ADD_MESSAGE,
+          newMessage: {
+            ...response.data.message
+          },
+          fromSelf: true,
+        })
 
 
 
@@ -152,60 +154,69 @@ function MessageBar() {
 
   return <div className="bg-panel-header-background h-20 px-4 items-center flex gap-6 relative">
 
+    {!showAudioRecorder && (
     <>
+
       <div className="flex gap-6">
 
         <BsEmojiSmile className="text-panel-header-icon cursor-pointer text-xl"
           title="Emoji"
           id="emoji-open"
           onClick={handleEmojiModal}
-        />
+          />
         {showEmojiPicker &&
-          <div className="absolute bottom-24 left-16 z-40"
-            ref={emojiPickerRef}
+                <div className="absolute bottom-24 left-16 z-40"
+                ref={emojiPickerRef}
+                
+                >
 
-          >
-
-            <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
-          </div>}
+                  <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+                </div>}
         <ImAttachment className="text-panel-header-icon cursor-pointer text-xl"
           title="Attach File"
           onClick={() => setGrabPhoto(true)}
-        />
+          />
 
       </div>
 
       <div className="w-full rounded-lg h-10 flex items-center ">
-
-        <input type="text"
-          placeholder="Type a message"
-          className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-full"
-          onChange={e => setMessage(e.target.value)}
-          value={message}
-        />
+          <input type="text"
+            placeholder="Type a message"
+            className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-full"
+            onChange={e => setMessage(e.target.value)}
+            value={message}
+            />
       </div>
 
       <div className="flex w-10 items-center justify-center">
-
         <button>
-
-          <MdSend
+          {message.length ? (
+            <MdSend
             className="text-panel-header-icon cursor-pointer text-xl"
             title="Send message"
             onClick={sendMessage}
+            />
+          ) : (
+            <FaMicrophone 
+            className="text-panel-header-icon cursor-pointer text-xl" 
+            title="Record" 
+            onClick={()=>setShowAudioRecorder(true)}
+            />
+          )}
 
 
-          />
-          {/*  <FaMicrophone className="text-panel-header-icon cursor-pointer text-xl" title="Record" /> */}
         </button>
 
       </div>
 
     </>
-
+  )}
     {(
       grabPhoto && <PhotoPicker onChange={photoPickerChange} />
     )}
+    {
+      showAudioRecorder && <CaptureAudio hide={setShowAudioRecorder} />
+    }
 
   </div>;
 }
