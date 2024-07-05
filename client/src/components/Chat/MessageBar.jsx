@@ -9,7 +9,11 @@ import axios from "axios";
 import { reducerCases } from "@/context/constants";
 import EmojiPicker from "emoji-picker-react";
 import PhotoPicker from "../common/PhotoPicker";
-import CaptureAudio from "../common/CaptureAudio";
+import dynamic from "next/dynamic";
+
+const CaptureAudio=dynamic(()=>import("../common/CaptureAudio"),{
+  ssr:false,
+})
 
 function MessageBar() {
 
@@ -20,6 +24,7 @@ function MessageBar() {
   const emojiPickerRef = useRef(null)
   const [grabPhoto, setGrabPhoto] = useState(false)
   const [showAudioRecorder, setShowAudioRecorder] = useState(false)
+
 
   const photoPickerChange = async (e) => {
 
@@ -40,10 +45,7 @@ function MessageBar() {
 
         }
 
-
       });
-
-
       if (response.status === 201) {
 
         socket.current.emit("send-msg", {
@@ -59,13 +61,7 @@ function MessageBar() {
           },
           fromSelf: true,
         })
-
-
-
       }
-
-
-
 
     } catch (error) {
       console.log(error)
