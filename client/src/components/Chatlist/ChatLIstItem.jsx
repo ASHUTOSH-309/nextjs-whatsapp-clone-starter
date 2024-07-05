@@ -2,6 +2,7 @@ import React from "react";
 import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
+import { calculateTime } from "@/utils/CalculateTime";
 
 function ChatLIstItem({data,isContactsPage=false}) {
   
@@ -10,8 +11,32 @@ function ChatLIstItem({data,isContactsPage=false}) {
   const handleContactClick=()=>{
 /* 
       if(currentChatUser?.id===data?.id){ */
-          dispatch({type:reducerCases.CHANGE_CURRENT_CHAT_USER,user:{...data}})
-          dispatch({type:reducerCases.SET_ALL_CONTACTS_PAGE})
+        if(!isContactsPage){
+
+            dispatch({
+
+                type:reducerCases.CHANGE_CURRENT_CHAT_USER,
+                user:{ 
+
+                    name:data.name,
+                    about:data.about,
+                    profilePicture:data.profilePicture,
+                    email:data.email,
+                    id:userInfo.id === data.senderId ? data.recieverId : data.senderId,
+
+              }
+
+
+            })
+
+
+        }else{
+
+          dispatch({type:reducerCases.CHANGE_CURRENT_CHAT_USER,user:{...data}});
+          dispatch({type:reducerCases.SET_ALL_CONTACTS_PAGE});
+
+
+        }
 /*       } */
 
 
@@ -29,9 +54,22 @@ function ChatLIstItem({data,isContactsPage=false}) {
 
                       <div>
 
-                          <span className="text-white ">{data.name}</span>
+                          <span className="text-white ">{data?.name}</span>
                       </div>
 
+                      {
+                          !isContactsPage &&(
+                              <div>
+
+                                    <span className={`${!data.totalUnreadMessages>0 ? "text-secondary" :"text-icon-green"} text-sm`}>
+                                          {calculateTime(data.createdAt)}
+                                    </span>
+
+                              </div>
+
+                          )
+
+                      }
 
               </div>
               <div className="flex border-b border-conversation-border pb-2 pt-1 pr-2">
