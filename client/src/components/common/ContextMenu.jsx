@@ -26,12 +26,12 @@ function ContextMenu({ options, cordinates, contextMenu, setContextMenu }) {
 
 
 
-  const handleClick = (e, callback) => {
+  const handleClick = (e, callBack) => {
 
 
     e.stopPropagation()
     setContextMenu(false)
-    callback();
+    callBack();
 
   }
 
@@ -49,10 +49,10 @@ function ContextMenu({ options, cordinates, contextMenu, setContextMenu }) {
 
     <ul>
       {
-        options.map(({ name, callback }) => (
+        options.map(({ name, callBack }) => (
           <li
             key={name} // Ensure each key is unique
-            onClick={(e) => handleClick(e, callback)}
+            onClick={(e) => handleClick(e, callBack)}
             className="px-5 py-2 cursor-pointer hover:bg-background-default-hover"
           >
             <span className="text-white">{name}</span>

@@ -101,7 +101,7 @@ export const generateToken=(req,res,next)=>{
 
 
                         const token=generateToken04(appId,userId,serverSecret,effectiveTime,payload)
-                     return res.status(200).json({token})
+                        return res.status(200).json({token})
 
 
             }

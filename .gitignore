@@ -38,3 +38,4 @@ yarn-error.log*
 .vercel
 
 client/src/utils/FirebaseConfig.js
+client/next.config.js

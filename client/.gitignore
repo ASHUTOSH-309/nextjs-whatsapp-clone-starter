@@ -1,2 +1,5 @@
 node_modules
-firebaseCo
+firebaseConfig
+.env
+next.config.js
+
